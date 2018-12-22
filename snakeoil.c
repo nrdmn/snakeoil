@@ -2,6 +2,7 @@
 #include <linux/module.h>
 #include <linux/reboot.h>
 #include <linux/slab.h>
+#include <linux/random.h>
 
 static int snakeoil_wipe(struct notifier_block *nb, unsigned long action, void *data)
 {
@@ -9,7 +10,7 @@ static int snakeoil_wipe(struct notifier_block *nb, unsigned long action, void *
 	void *prev = NULL;
 
 	while ((ptr = kmalloc(4096, GFP_KERNEL|__GFP_NORETRY)) != NULL) {
-		memset(ptr, 0, 4096);
+		get_random_bytes(ptr, 4096);
 		*(void **)ptr = prev;
 		prev = ptr;
 	}
