@@ -10,13 +10,13 @@ static int snakeoil_wipe(struct notifier_block *nb, unsigned long action, void *
 	void *prev = NULL;
 
 	while ((ptr = kmalloc(4096, GFP_KERNEL|__GFP_NORETRY)) != NULL) {
-		get_random_bytes(ptr, 4096);
 		*(void **)ptr = prev;
 		prev = ptr;
 	}
 
 	while (prev != NULL) {
 		ptr = *(void **)prev;
+		get_random_bytes(prev, 4096);
 		kfree(prev);
 		prev = ptr;
 	}
